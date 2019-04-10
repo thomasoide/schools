@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="header">Search suspensions given in Missouri school districts</h1>
+
+<h3 class="subhead">Presented by the Missouri News Network</h3>
+
+<div class="formContainer">
+  <form action="https://n5iu4pwcrb.execute-api.us-east-2.amazonaws.com/schools/search" method="get">
+    <!-- <input type="text" name="district" placeholder="School District"/> -->
+    <select name="district" required style="display: block; margin: 15px auto;">
+      <option value="" name="default">
+        Select a district
+      </option>
+      {% for district in district_list %}
+      <option value="{{ district.district_name }}">
+        {{ district.district_name }}
+      </option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Search"/>
+  </form>
+</div>
+
+<div class="bodyText">
+  <p>
+    From 2008 to 2017, Missouri school districts gave more than 2.5 million in-school and out-of-school suspensions.
+    Black students accounted for more than 42 percent of those suspensions, even though they've never accounted for more than 20 percent of Missouri's public school enrollment in any given year.
+  </p>
+  <p>
+    This tool allows you to search for the suspension numbers in your own school district. This tool is also best experienced on a desktop-sized screen.
+  </p>
+  <p>
+    A few notes to help you interpret the results:
+  </p>
+  <ul>
+    <li>A value of "N/A" means that the value was not present in the suspension dataset. This value does not necessarily equate to 0 suspensions. The data obtained from the Missouri Department of Elementary and Secondary Education had cells with less than 5 suspensions redacted from the dataset to protect student privacy.</li>
+    <li>The disparity index is a value that shows whether certain racial groups were over- or underrepresented in suspensions.</li>
+    <li>A disparity index value above 1 indicates that a group accounts for a higher proportion of suspensions than its percentage of the population would predict. A value less than 1 indicates that a group accounts for a lesser proportion of suspension than its percentage of the population would predict.</li>
+    <li>It is important to note that this dataset tracks the number of suspensions given, NOT the number of unique students suspended. If a record states that there were 10 suspensions given, it could mean that 10 students were suspended once or that 5 students were suspended twice each.</li>
+  </ul>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="header">Search suspensions given in Missouri school districts</h1>
+
+<h3 class="subhead">Presented by the Missouri News Network</h3>
+
+<div class="formContainer">
+  <form action="" method="get">
+    <!-- <input type="text" name="district" placeholder="School District"/> -->
+    <select name="district" required style="display: block; margin: 15px auto;">
+      <option value="" name="default">
+        Select a district
+      </option>
+      {% for district in district_list %}
+      <option value="{{ district.district_name }}">
+        {{ district.district_name }}
+      </option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Search"/>
+  </form>
+</div>
+
+<div class="bodyText">
+  <p>
+    From 2008 to 2017, Missouri school districts gave more than 2.5 million in-school and out-of-school suspensions.
+    Black students accounted for more than 40 percent of those suspensions, even though they've never accounted for more than 20 percent of Missouri's public school enrollment in any given year.
+  </p>
+  <p>
+    This tool allows you to search the number of suspensions given in your own school district. It is best experienced on a desktop-sized screen.
+  </p>
+  <p>
+    A few notes to help you interpret the results:
+  </p>
+  <ul>
+    <li>A value of "N/A" means that the value was not present in the suspension dataset. This value does not necessarily equate to 0 suspensions. The data obtained from the Missouri Department of Elementary and Secondary Education had cells with less than 5 suspensions redacted from the dataset to protect student privacy.</li>
+    <li>The disparity index is a value that shows whether certain racial groups were over- or underrepresented in suspensions.  To calculate the disparity index, we divided each racial group’s percentage share of suspensions by their enrollment percentage.</li>
+    <li>A disparity index value above 1 indicates that a group accounts for a higher proportion of suspensions than its percentage of the population would predict. A value less than 1 indicates that a group accounts for a lesser proportion of suspension than its percentage of the population would predict.</li>
+    <li>It is important to note that this dataset tracks the number of suspensions given, NOT the number of unique students suspended. If a record states that there were 10 suspensions given, it could mean that 10 students were suspended once or that 5 students were suspended twice each.</li>
+  </ul>
+</div>
+
+{% if error or not suspension_list %}
+
+<h3 class="header" style="color:red;">No results found. Please search again.</h3>
+
+{% else %}
+
+<div class="wrapper">
+
+<h2 class="subhead">Results for {{ district_query|upper }}</h2>
+
+<div class="tableContainer">
+  <h4 class="table-sh">Suspensions</h4>
+  <table class="table-responsive table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>District Name</th>
+          <th>Total Enrollment</th>
+          <th>Total Suspensions</th>
+          <th>Black In-School</th>
+          <th>Black Out-of-School</th>
+          <th>White In-School</th>
+          <th>White Out-of-School</th>
+          <th>Hispanic</th>
+          <th>Asian</th>
+          <th>Multiracial</th>
+          <th>Pacific Islander</th>
+          <th>Indian</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for suspension in suspension_list %}
+        <tr>
+          <td>{{ suspension.school_year }}</td>
+          <td>{{ suspension.district_name }}</td>
+          {% load humanize %}
+          <td>{{ suspension.enrollment_grades_k_12|intcomma }}</td>
+          <td>{{ suspension.total_susp|intcomma }}</td>
+          {% if suspension.iss_b is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.iss_b|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.oss_b is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.oss_b|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.iss_w is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.iss_w|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.oss_w is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.oss_w|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.h is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.h|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.a is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.a|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.m is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.m|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.p is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.p|intcomma }}</td>
+          {% endif %}
+
+          {% if suspension.i is None %}
+          <td>N/A</td>
+          {% else %}
+          <td>{{ suspension.i|intcomma }}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="tableContainer">
+    <h4 class="table-sh">Disparity Indices</h4>
+    <table class="responsive-table table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>District Name</th>
+          <th>Black Disparity Index</th>
+          <th>White Disparity Index</th>
+          <th>Hispanic Disparity Index</th>
+          <th>Asian Disparity Index</th>
+          <th>Multiracial Disparity Index</th>
+          <th>Pacific Islander Disparity Index</th>
+          <th>Indian Disparity Index</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for suspension in suspension_list %}
+        <tr>
+          <td>{{ suspension.school_year }}</td>
+          <td>{{ suspension.district_name }}</td>
+          <td>{{ suspension.b_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.w_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.h_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.a_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.m_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.p_disp|floatformat:4|default:"N/A" }}</td>
+          <td>{{ suspension.i_disp|floatformat:4|default:"N/A" }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endif %}
+
+
+{% endblock %}

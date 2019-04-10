@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'district_search/style.css' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Domine|Open+Sans" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+  </head>
+  <body>
+    <nav id="navigation">
+      <ul>
+        <li><a href="https://www.komu.com/home/">KOMU</a></li>
+        <li><a href="https://www.columbiamissourian.com/">Columbia Missourian</a></li>
+      </ul>
+    </nav>
+    {% block content %}{% endblock %} <!-- All page content will go here. Any client-side Javascript will go at the bottom -->
+  </body>
+</html>
