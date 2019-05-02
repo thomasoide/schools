@@ -1,2 +1,4 @@
 zappa_settings.json
 zappa_settings_personal.json
+.env
+settings.py
