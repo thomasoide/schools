@@ -26,7 +26,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'n5iu4pwcrb.execute-api.us-east-2.amazonaws.com','fsodxhyovg.execute-api.us-east-2.amazonaws.com']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '.execute-api.us-east-2.amazonaws.com',
+    '.rjifuture.org',
+]
 
 YOUR_S3_BUCKET = os.getenv('AWS_STORAGE_BUCKET_NAME')
 
